@@ -1,14 +1,14 @@
 # RubyCart
 
-## Installation
+## Running tests
 
-Add this line to your application's Gemfile:
+```
+bundle install
 
-```ruby
-gem 'ruby_cart'
+rspec
 ```
 
-### Docker instructions
+## Docker instructions
 
 ```
 docker build . -t ruby_cart
