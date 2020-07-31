@@ -1,5 +1,4 @@
 RSpec.describe RubyCart::Checkout do
-  describe 'checkout' do
     before do
       @rules = RubyCart::PromotionalRules.new
 
@@ -42,5 +41,4 @@ RSpec.describe RubyCart::Checkout do
 
       expect(@co.total).not_to eq Money.new(1850)
     end
-  end
 end
