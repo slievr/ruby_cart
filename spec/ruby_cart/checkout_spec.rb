@@ -1,35 +1,46 @@
-require 'ruby_cart/checkout'
+RSpec.describe RubyCart::Checkout do
+  describe 'checkout' do
+    before do
+      @rules = RubyCart::PromotionalRules.new
 
-RSpec.describe Checkout do
-  it 'test' do
-    expect(subject.nil?).to eq false
-  end
+      @co = RubyCart::Checkout.new(@rules)
 
-  it 'New basket has no value' do
-    expect(subject.total).to eq '£0.00'
-  end
+      @rule1 = RubyCart::PromotionalRule::QuantityDiscount.new('001', 2, 850)
+      @rule2 = RubyCart::PromotionalRule::TotalPercentageDiscount.new(60, 10)
 
-  it 'Basket: 001,002,003' do
-    co = Checkout.new(promotional_rules)
-    co.scan(item)
-    co.scan(item)
+      @prod001 = RubyCart::Product.new('001', 'Lavender heart', 925)
+      @prod002 = RubyCart::Product.new('002', 'Personalised cufflinks', 4500)
+      @prod003 = RubyCart::Product.new('003', 'Kids T-shirt', 1995)
+    end
 
-    expect(co.total).to eq '£66.78'
-  end
+    it 'scaning items changes the basket_size.' do
+      @co.scan(@prod001)
 
-  it 'Basket: 001,003,001' do
-    co = Checkout.new(promotional_rules)
-    co.scan(item)
-    co.scan(item)
+      expect(@co.basket_size).to eq 1
+    end
 
-    expect(co.total).to eq '£36.95'
-  end
+    it 'total calculates correctly with no rules applied.' do
+      @co.scan(@prod001)
 
-  it 'Basket: 001,002,001,003' do
-    co = Checkout.new(promotional_rules)
-    co.scan(item)
-    co.scan(item)
+      expect(@co.total).to eq Money.new(925)
+    end
 
-    expect(co.total).to eq '£73.76'
+    it 'total calculates correctly when multiple items added.' do
+      @co.scan(@prod001)
+      @co.scan(@prod001)
+
+      expect(@co.total).to eq Money.new(1850)
+    end
+
+    it 'applying product discounts modifies the total.' do
+      @co.scan(@prod001)
+      @co.scan(@prod001)
+
+      expect(@co.total).to eq Money.new(1850)
+
+      @rules.add_rule(@rule1)
+
+      expect(@co.total).not_to eq Money.new(1850)
+    end
   end
 end
