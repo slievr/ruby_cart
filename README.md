@@ -7,6 +7,10 @@ Each type of discount had it's own class definition. Initially I thought about h
 Function definitions stored in a db seems highly coupled to me, and generally ugly. So I decided against it.
 The end solution isn't the cleanest and within the promotionalRules class there is property checking on symbols. The idea behind this is that if a rule is added that the system doesn't recognize from db(or wherever), that it gets ignored and doesn't effect the user (well they wouldn't get a discount).
 
+# Requirements
+
+- ruby >= 2.5 (tested on 2.5)
+
 ## Running tests
 
 ```shell
